@@ -21,10 +21,6 @@ jobs:
             triplet: x64-linux
             vcpkgCommitId: '8a9a97315aefb3f8bc5d81bf66ca0025938b9c91'
             vcpkgPackages: 'sqlite3'
-          - os: macos-latest
-            triplet: x64-osx
-            vcpkgCommitId: '8a9a97315aefb3f8bc5d81bf66ca0025938b9c91'
-            vcpkgPackages: 'sqlite3'
 
     steps:
       - uses: actions/checkout@v1
@@ -36,7 +32,7 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
       - name: Restore artifacts, or run vcpkg, build and cache artifacts
-        uses: lukka/run-vcpkg@dev/consume_latest_packages
+#        uses: lukka/run-vcpkg@dev/consume_latest_packages
         id: runvcpkg
         with:
           vcpkgArguments: '${{ matrix.vcpkgPackages }}'
@@ -49,7 +45,7 @@ jobs:
       - name: Prints outputs of run-vcpkg task
         run: echo "'${{ steps.runvcpkg.outputs.RUNVCPKG_VCPKG_ROOT_OUT }}' '${{  steps.runvcpkg.outputs.RUNVCPKG_VCPKG_TRIPLET_OUT }}' "
       - name: Run CMake+Ninja without triplet
-        uses: lukka/run-cmake@dev_consume_latest_packages
+#        uses: lukka/run-cmake@dev_consume_latest_packages
         id: runcmake
         with:
           cmakeGenerator: 'Ninja'  
@@ -59,7 +55,7 @@ jobs:
           buildWithCMakeArgs: '-- -v'
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
       - name: Run CMake+Ninja with triplet (cmd)
-        uses: lukka/run-cmake@dev_consume_latest_packages
+#        uses: lukka/run-cmake@dev_consume_latest_packages
         id: runcmake_cmd
         with:
           cmakeGenerator: 'Ninja'  
@@ -71,7 +67,7 @@ jobs:
           buildDirectory: '${{ runner.workspace }}/b/ninja/'
       - name: Run CMake+Ninja with triplet (bash)
         if: false
-        uses: lukka/run-cmake@dev_consume_latest_packages
+#        uses: lukka/run-cmake@dev_consume_latest_packages
         id: runcmake_bash
         with:
           cmakeGenerator: 'Ninja'  
