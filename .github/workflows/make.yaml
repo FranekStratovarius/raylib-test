@@ -60,13 +60,13 @@ jobs:
           draft: false
           prerelease: true
 
-      - name: Upload linux x86-64
-        id: upload-linux-x86-64
+      - name: Upload windows exe
+        id: upload-windows-exe
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/windows/Debug/xavine.exe
+          asset_path: ./build/windows/Debug/xavine.zip
           asset_name: xavine.exe
           asset_content_type: application
