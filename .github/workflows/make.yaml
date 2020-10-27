@@ -3,7 +3,7 @@ name: Create a Release
 on: [push]
 
 jobs:
-  build:
+  build-linux:
     name: Upload Release Asset
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +34,39 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/xavine
+          asset_path: ./build/linux/xavine
           asset_name: xavine
           asset_content_type: application
 
+  build-windows:
+    name: Upload Release Asset
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build project # This would actually build your project, using zip for an example artifact
+        run: |
+          echo "starting"
+          ./build.bat
+          echo "complete"
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}_${{ github.run_id }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: true
+
+      - name: Upload linux x86-64
+        id: upload-linux-x86-64
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/windows/xavine.exe
+          asset_name: xavine
+          asset_content_type: application
