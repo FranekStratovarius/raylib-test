@@ -55,8 +55,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}_${{ github.run_id }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref }}_${{ github.run_id }}_windoof
+          release_name: Release windoof ${{ github.ref }}
           draft: false
           prerelease: true
 
