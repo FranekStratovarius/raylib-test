@@ -1,3 +1,3 @@
 mkdir build
 mkdir build\windows
-cd build\windows && cmake ..\.. && cmake --build . && cd Debug && Compress-Archive xavine.zip *
+cd build\windows && cmake ..\.. && cmake --build . && cd Debug && powershell Compress-Archive . xavine.zip
