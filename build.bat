@@ -1,1 +1,4 @@
-cd build/windows && cmake -DCMAKE_TOOLCHAIN_FILE=../../CMake-toolchain-Windows.txt ../..
+mkdir build
+mkdir build/windows
+cd build/windows
+cmake ../..
