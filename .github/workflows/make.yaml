@@ -34,7 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/linux/xavine/xavine
+          asset_path: ./build/linux/xavine
           asset_name: xavine
           asset_content_type: application
 
@@ -68,5 +68,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./build/windows/Debug/xavine.exe
-          asset_name: xavine
+          asset_name: xavine.exe
           asset_content_type: application
