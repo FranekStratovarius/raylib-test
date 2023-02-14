@@ -1,5 +1,21 @@
+/*******************************************************************************************
+*
+*   raylib [models] example - Heightmap loading and drawing
+*
+*   Example originally created with raylib 1.8, last time updated with raylib 3.5
+*
+*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
+*   BSD-like license that allows static linking with closed source software
+*
+*   Copyright (c) 2015-2023 Ramon Santamaria (@raysan5)
+*
+********************************************************************************************/
+
 #include "raylib.h"
 
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
 int main(void)
 {
     // Initialization
@@ -7,22 +23,33 @@ int main(void)
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - keyboard input");
+    InitWindow(screenWidth, screenHeight, "raylib [models] example - heightmap loading and drawing");
 
-    Vector2 ballPosition = { (float)screenWidth/2, (float)screenHeight/2 };
+    // Define our custom camera to look into our 3d world
+    Camera camera = { { 18.0f, 18.0f, 18.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, 45.0f, 0 };
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    Image image = LoadImage("resources/heightmap.png");             // Load heightmap image (RAM)
+    Texture2D texture = LoadTextureFromImage(image);                // Convert image to texture (VRAM)
+
+    Mesh mesh = GenMeshHeightmap(image, (Vector3){ 16, 8, 16 });    // Generate heightmap mesh (RAM and VRAM)
+    Model model = LoadModelFromMesh(mesh);                          // Load model from generated mesh
+
+    model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;         // Set map diffuse texture
+    Vector3 mapPosition = { -8.0f, 0.0f, -8.0f };                   // Define model position
+
+    UnloadImage(image);                     // Unload heightmap image from RAM, already uploaded to VRAM
+
+    SetCameraMode(camera, CAMERA_ORBITAL);  // Set an orbital camera mode
+
+    SetTargetFPS(60);                       // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    while (!WindowShouldClose())            // Detect window close button or ESC key
     {
         // Update
         //----------------------------------------------------------------------------------
-        if (IsKeyDown(KEY_RIGHT)) ballPosition.x += 2.0f;
-        if (IsKeyDown(KEY_LEFT)) ballPosition.x -= 2.0f;
-        if (IsKeyDown(KEY_UP)) ballPosition.y -= 2.0f;
-        if (IsKeyDown(KEY_DOWN)) ballPosition.y += 2.0f;
+        UpdateCamera(&camera);
         //----------------------------------------------------------------------------------
 
         // Draw
@@ -31,9 +58,18 @@ int main(void)
 
             ClearBackground(RAYWHITE);
 
-            DrawText("move the ball with arrow keys", 10, 10, 20, DARKGRAY);
+            BeginMode3D(camera);
 
-            DrawCircleV(ballPosition, 50, MAROON);
+                DrawModel(model, mapPosition, 1.0f, RED);
+
+                DrawGrid(20, 1.0f);
+
+            EndMode3D();
+
+            DrawTexture(texture, screenWidth - texture.width - 20, 20, WHITE);
+            DrawRectangleLines(screenWidth - texture.width - 20, 20, texture.width, texture.height, GREEN);
+
+            DrawFPS(10, 10);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -41,7 +77,10 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    CloseWindow();        // Close window and OpenGL context
+    UnloadTexture(texture);     // Unload texture
+    UnloadModel(model);         // Unload model
+
+    CloseWindow();              // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
     return 0;

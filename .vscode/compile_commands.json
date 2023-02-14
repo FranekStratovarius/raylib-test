@@ -1,0 +1,6 @@
+[
+{
+  "directory": "/Users/cotrisallgemein/projects/test",
+  "arguments": ["/usr/bin/xcrun -sdk macosx clang", "-c", "-Qunused-arguments", "-fvisibility=hidden", "-O3", "-DGL_SILENCE_DEPRECATION", "-framework", "CoreVideo", "-framework", "CoreGraphics", "-framework", "AppKit", "-framework", "IOKit", "-framework", "CoreFoundation", "-framework", "Foundation", "-framework", "OpenGL", "-I", "/Users/cotrisallgemein/.xmake/packages/r/raylib/4.2.0/5a76a8420ef94122bf11c5cc1c6699fb/include", "-DNDEBUG", "-o", "build/.objs/test/macosx/arm64/release/src/main.c.o", "src/main.c"],
+  "file": "src/main.c"
+}]
